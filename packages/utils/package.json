@@ -14,7 +14,6 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "http://registry.npm.taobao.org",
     "access": "public"
   },
   "scripts": {
@@ -23,5 +22,5 @@
   "dependencies": {
     "@imooc-cli/utils": "^1.1.1"
   },
-  "gitHead": "47baa61983a08f526f379aa65d41caf90d89a2d4"
+  "gitHead": "b72dc12bab066a882d8a822c1bffedc34e08fa0f"
 }
