@@ -1,6 +1,6 @@
 {
   "name": "@roy-cli-dev/core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "roy-cli-dev core",
   "author": "徐聪 <753428092@qq.com>",
   "homepage": "",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@imooc-cli/utils": "^1.1.1",
-    "@roy-cli-dev/utils": "^1.0.1"
+    "@roy-cli-dev/utils": "^1.0.2"
   },
   "gitHead": "bde099cdc9c53bf4360136ad9f30f17fe5f7dad6"
 }
