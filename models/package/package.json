@@ -1,0 +1,38 @@
+{
+  "name": "@roy-cli-dev/package",
+  "version": "1.0.4",
+  "description": "> TODO: description",
+  "author": "徐聪 <753428092@qq.com>",
+  "homepage": "https://github.com/shamworld/roy-cli-dev#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shamworld/roy-cli-dev.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/shamworld/roy-cli-dev/issues"
+  },
+  "dependencies": {
+    "@roy-cli-dev/format-path": "file:../../utils/format-path",
+    "@roy-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
+    "@roy-cli-dev/utils": "file:../../utils/utils",
+    "fs-extra": "^7.0.1",
+    "npminstall": "^4.10.0",
+    "path-exists": "^4.0.0",
+    "pkg-dir": "^5.0.0"
+  }
+}

@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-02-25 22:44:37
  * @LastEditors: Roy
- * @LastEditTime: 2021-02-25 23:13:36
+ * @LastEditTime: 2021-03-05 11:26:10
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/utils/get-npm-info/lib/index.js
  */
@@ -59,11 +59,22 @@ async function getNpmSemverVersion(baseVersion,npmName,registry) {
     }
 }
 
+async function getNpmLatestVersion(npmName,registry) {
+    let versions = await getNpmVersions(npmName,registry);
+    if (versions) {
+        return versions.sort((a,b)=> semver.gt(b,a))[0];
+    }
+    return null;
+}
+
+
 module.exports = {
     getNpmInfo,
+    getDefaultRegistry,
     getNpmVersions,
     getSemverVersions,
-    getNpmSemverVersion
+    getNpmSemverVersion,
+    getNpmLatestVersion
 };
 
 

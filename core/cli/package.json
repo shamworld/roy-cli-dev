@@ -23,9 +23,12 @@
     "test": "echo \"Run testing from core\""
   },
   "dependencies": {
+    "@roy-cli-dev/exec": "file:../exec",
     "@roy-cli-dev/get-npm-info": "file:../../utils/get-npm-info",
+    "@roy-cli-dev/init": "file:../../commands/init",
     "@roy-cli-dev/log": "file:../../utils/log",
     "colors": "^1.4.0",
+    "commander": "^7.1.0",
     "dotenv": "^8.2.0",
     "import-local": "^3.0.2",
     "minimist": "^1.2.5",
