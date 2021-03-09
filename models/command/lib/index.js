@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-03-08 10:04:27
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-08 10:43:07
+ * @LastEditTime: 2021-03-09 10:48:14
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/models/command/lib/index.js
  */
@@ -52,7 +52,6 @@ class Command {
     initArgs(){
         this._cmd = this._argv[this._argv.length-1];
         this._argv = this._argv.slice(0,this._argv.length-1);
-        // console.log(this._cmd,this._argv);
     }
     // 检查node版本
     checkNodeVersion() {

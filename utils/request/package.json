@@ -1,7 +1,7 @@
 {
-  "name": "@roy-cli-dev/init",
+  "name": "@roy-cli-dev/request",
   "version": "1.0.4",
-  "description": "roy-cli-dev init",
+  "description": "roy-cli-dev request",
   "author": "徐聪 <753428092@qq.com>",
   "homepage": "https://github.com/shamworld/roy-cli-dev#readme",
   "license": "ISC",
@@ -27,14 +27,6 @@
     "url": "https://github.com/shamworld/roy-cli-dev/issues"
   },
   "dependencies": {
-    "@roy-cli-dev/command": "file:../../models/command",
-    "@roy-cli-dev/log": "file:../../utils/log",
-    "@roy-cli-dev/package": "file:../../models/package",
-    "@roy-cli-dev/request": "file:../../utils/request",
-    "@roy-cli-dev/utils": "file:../../utils/utils",
-    "fs-extra": "^9.1.0",
-    "inquirer": "^8.0.0",
-    "semver": "^7.3.4",
-    "user-home": "^2.0.0"
+    "axios": "^0.21.1"
   }
 }

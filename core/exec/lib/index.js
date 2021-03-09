@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-03-04 18:25:02
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-08 11:13:09
+ * @LastEditTime: 2021-03-09 21:19:40
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/core/exec/lib/index.js
  */
@@ -38,7 +38,7 @@ async function exec() {
         //生成缓存路径
         targetPath = path.resolve(homePath, CACHE_DIR);
         storeDir = path.resolve(targetPath, 'node_modules');
-        console.log(targetPath, storeDir);
+        log.verbose(targetPath, storeDir);
         pkg = new Package({
             targetPath,
             storeDir,
