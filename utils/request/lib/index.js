@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-03-09 22:33:06
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-10 18:13:44
+ * @LastEditTime: 2021-03-10 21:22:19
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/utils/request/lib/index.js
  */
@@ -48,6 +48,15 @@ const request = function () {
         name: 'vue2管理后台模板',
         npmName: 'roy-cli-dev-template-vue-element-admin',
         type: 'normal',
+        installCommand: 'npm install --registry=https://registry.npm.taobao.org/',
+        startCommand: 'npm run serve',
+        version: '1.0.0',
+        tag: ['project'],
+        ignore: ['**/public/**']
+    }, {
+        name: 'vue2自定义模板',
+        npmName: 'imooc-cli-dev-template-custom-vue2',
+        type: 'custom',
         installCommand: 'npm install --registry=https://registry.npm.taobao.org/',
         startCommand: 'npm run serve',
         version: '1.0.0',

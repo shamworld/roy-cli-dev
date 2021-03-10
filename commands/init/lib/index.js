@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-03-04 15:53:52
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-10 18:20:07
+ * @LastEditTime: 2021-03-10 20:57:28
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/commands/init/lib/index.js
  */
@@ -166,7 +166,23 @@ class InitCommand extends Command {
         await this.execCommand(startCommand, '启动执行命令失败');
     }
     async installCustomTemplate() {
-
+        //查询自定义模板的入口文件
+        if (await this.templateNpm.exists()) {
+            const rootFile = this.templateNpm.getRootFile();
+            if (fs.existsSync(rootFile)) {
+                log.notice('开始执行自定义模板');
+                const options = {
+                    ...this.options,
+                    cwd:process.cwd(),
+                }
+                const code = `require('${rootFile}')(${JSON.stringify(options)})`;
+                log.verbose('code',code);
+                await execAsync('node',['-e', code], { stdio: 'inherit', cwd: process.cwd()});
+                log.success('自定义模板安装成功');
+            } else {
+                throw new Error('自定义模板入口文件不存在');
+            }
+        }
     }
 
     async downloadTemplate() {
