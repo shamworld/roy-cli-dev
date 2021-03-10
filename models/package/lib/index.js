@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-03-04 20:08:57
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-05 12:46:43
+ * @LastEditTime: 2021-03-10 16:33:15
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/models/package/lib/index.js
  */
@@ -63,7 +63,6 @@ class Package {
     async exists() {
         if (this.storeDir) {
             await this.prepare();
-            console.log(this.cachFilePath);
             return pathExists(this.cachFilePath);
         } else {
             return pathExists(this.targetPath);
@@ -99,6 +98,8 @@ class Package {
                     { name: this.packageName, version: latestPackageVersion }
                 ]
             })
+            this.packageVersion = latestPackageVersion;
+        } else {
             this.packageVersion = latestPackageVersion;
         }
     }

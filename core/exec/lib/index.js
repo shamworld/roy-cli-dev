@@ -5,19 +5,20 @@
  * @Github: @163.com
  * @Date: 2021-03-04 18:25:02
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-09 21:19:40
+ * @LastEditTime: 2021-03-10 16:37:35
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/core/exec/lib/index.js
  */
 'use strict';
 
-const cp = require('child_process');
+
 const path = require('path');
 const Package = require('@roy-cli-dev/package');
 const log = require('@roy-cli-dev/log');
+const {exec: spawn} = require('@roy-cli-dev/utils');
 
 const SETTINGS = {
-    init: "@imooc-cli/init",
+    init: "@roy-cli-dev/init",
 }
 
 const CACHE_DIR = 'dependencies/';
@@ -100,15 +101,6 @@ async function exec() {
     //4.Package.update/Package.install
 
 
-}
-
-function spawn(command, args, options){
-    const win32 = process.platform === 'win32';
-
-    const cmd = win32 ? 'cmd' : command;
-    const cmdArgs = win32 ? ['/c'].concat(command,args) : args;
-
-    return cp.spawn(cmd, cmdArgs,options || {});
 }
 
 module.exports = exec;

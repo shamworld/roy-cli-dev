@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-02-23 20:34:11
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-08 10:18:36
+ * @LastEditTime: 2021-03-10 14:58:31
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/core/cli/lib/index.js
  */
@@ -71,7 +71,7 @@ function registerCommand() {
 
     //开启debug模式
     program.on('option:debug', function () {
-        if (program.opts().debug) {
+        if (program.debug) {
             process.env.LOG_LEVEL = 'verbose';
         } else {
             process.env.LOG_LEVEL = 'info';
@@ -82,15 +82,15 @@ function registerCommand() {
 
     //指定targetPath
     program.on('option:targetPath', function () {
-        process.env.CLI_TARGET_PATH = program.opts().targetPath;
+        process.env.CLI_TARGET_PATH = program.targetPath;
     });
 
     //对未知命令的监听
     program.on('command:*', function (obj) {
         const availabelCommands = program.commands.map(cmd => cmd.name());
-        console.log(colors.red('未知命令:' + obj[0]));
+        log.verbose(colors.red('未知命令:' + obj[0]));
         if (availabelCommands.length > 0) {
-            console.log(colors.blue('可用命令:' + availabelCommands.join(',')));
+            log.verbose(colors.blue('可用命令:' + availabelCommands.join(',')));
         }
     })
 

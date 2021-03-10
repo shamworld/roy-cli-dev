@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-03-09 22:33:06
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-09 23:19:50
+ * @LastEditTime: 2021-03-10 18:13:44
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/utils/request/lib/index.js
  */
@@ -38,11 +38,30 @@ const request = function () {
     return [{
         name: 'vue3标准模板',
         npmName: 'roy-cli-dev-template',
-        version: '1.0.0'
-    },{
+        type: 'normal',
+        installCommand: 'npm install --registry=https://registry.npm.taobao.org/',
+        startCommand: 'npm run serve',
+        version: '1.0.0',
+        tag: ['project'],
+        ignore: ['**/public/**']
+    }, {
         name: 'vue2管理后台模板',
         npmName: 'roy-cli-dev-template-vue-element-admin',
-        version: '1.0.0'
+        type: 'normal',
+        installCommand: 'npm install --registry=https://registry.npm.taobao.org/',
+        startCommand: 'npm run serve',
+        version: '1.0.0',
+        tag: ['project'],
+        ignore: ['**/public/**']
+    }, {
+        name: '组件库模板',
+        npmName: 'roy-cli-dev-lego-components',
+        type: 'normal',
+        installCommand: 'npm install --registry=https://registry.npm.taobao.org/',
+        startCommand: 'npm run serve',
+        version: '1.0.0',
+        tag: ['component'],
+        ignore: ['**/public/**','**.png']
     }]
 }
 

@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@roy-cli-dev/log": "file:../../utils/log",
-    "@roy-cli-dev/package": "file:../../models/package"
+    "@roy-cli-dev/package": "file:../../models/package",
+    "@roy-cli-dev/utils": "file:../../utils/utils"
   }
 }
