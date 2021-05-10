@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-03-04 15:53:52
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-10 20:57:28
+ * @LastEditTime: 2021-05-10 22:37:24
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/commands/init/lib/index.js
  */
@@ -272,8 +272,8 @@ class InitCommand extends Command {
                     fse.emptyDirSync(localPath)
                 }
             }
-            return this.getProjectInfo();
         }
+        return this.getProjectInfo();
 
         //3.选择创建项目或组件
         //4.获取项目得基本信息
