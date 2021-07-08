@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-03-04 15:53:52
  * @LastEditors: Roy
- * @LastEditTime: 2021-05-10 22:37:24
+ * @LastEditTime: 2021-05-11 17:15:25
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/commands/init/lib/index.js
  */
@@ -147,9 +147,9 @@ class InitCommand extends Command {
         try {
             const templatePath = path.resolve(this.templateNpm.cachFilePath, 'template');
             const targetPath = process.cwd();
-            fse.ensureDirSync(templatePath);
+            fse.ensureDirSync(templatePath);//确保当前文件存不存在，不存在会创建
             fse.ensureDirSync(targetPath);
-            fse.copySync(templatePath, targetPath);
+            fse.copySync(templatePath, targetPath);//把缓存目录下的模板拷贝到当前目录
         } catch (e) {
             throw e;
         } finally {

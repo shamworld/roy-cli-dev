@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-03-04 18:25:02
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-10 16:37:35
+ * @LastEditTime: 2021-06-27 20:11:32
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/core/exec/lib/index.js
  */
@@ -15,10 +15,11 @@
 const path = require('path');
 const Package = require('@roy-cli-dev/package');
 const log = require('@roy-cli-dev/log');
-const {exec: spawn} = require('@roy-cli-dev/utils');
+const { exec: spawn } = require('@roy-cli-dev/utils');
 
 const SETTINGS = {
     init: "@roy-cli-dev/init",
+    publish: "@roy-cli-dev/publish",
 }
 
 const CACHE_DIR = 'dependencies/';
@@ -69,23 +70,23 @@ async function exec() {
             const args = Array.from(arguments);
             const cmd = args[args.length - 1];
             const o = Object.create(null);
-            Object.keys(cmd).forEach(key=>{
+            Object.keys(cmd).forEach(key => {
                 if (cmd.hasOwnProperty(key) && !key.startsWith('_') && key !== 'parent') {
                     o[key] = cmd[key];
                 }
             })
             args[args.length - 1] = o;
             const code = `require('${rootFile}').call(null, ${JSON.stringify(args)})`;
-            const child = spawn('node',['-e',code],{
-                cwd:process.cwd(),
-                stdio:'inherit'
+            const child = spawn('node', ['-e', code], {
+                cwd: process.cwd(),
+                stdio: 'inherit'
             });
-            child.on('error',e=>{
+            child.on('error', e => {
                 log.error(e.message);
                 process.exit(1);
             });
-            child.on('exit',e=>{
-                log.verbose('命令执行成功:'+e);
+            child.on('exit', e => {
+                log.verbose('命令执行成功:' + e);
                 process.exit(e);
             })
         } catch (e) {

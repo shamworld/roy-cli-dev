@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-02-23 20:34:11
  * @LastEditors: Roy
- * @LastEditTime: 2021-03-10 14:58:31
+ * @LastEditTime: 2021-07-05 23:08:30
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/core/cli/lib/index.js
  */
@@ -68,6 +68,12 @@ function registerCommand() {
         .option('-f, --force', '是否强制初始化项目')
         .action(exec);
 
+    program
+        .command('publish')
+        .option('--refreshServer', '强制更新Git远程仓库')
+        .option('--refreshToken', '强制更新远程仓库token')
+        .option('--refreshOwner', '强制更新远程仓库类型')
+        .action(exec);
 
     //开启debug模式
     program.on('option:debug', function () {
