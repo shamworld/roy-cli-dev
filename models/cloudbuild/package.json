@@ -1,5 +1,5 @@
 {
-  "name": "@roy-cli-dev/git",
+  "name": "@roy-cli-dev/cloudbuild",
   "version": "1.0.0",
   "description": "> TODO: description",
   "author": "徐聪 <admin@example.com>",
@@ -27,15 +27,10 @@
     "url": "https://github.com/shamworld/roy-cli-dev/issues"
   },
   "dependencies": {
-    "@roy-cli-dev/log": "file:../../utils/log",
-    "@roy-cli-dev/utils": "file:../../utils/utils",
-    "@roy-cli-dev/cloudbuild": "file:../../models/cloudbuild",
-    "axios": "^0.21.1",
-    "fs-extra": "^10.0.0",
+    "@imooc-cli-dev/log": "file:../../utils/log",
+    "@imooc-cli-dev/request": "file:../../utils/request",
     "inquirer": "^8.1.1",
-    "semver": "^7.3.5",
-    "simple-git": "^2.40.0",
-    "terminal-link": "^2.1.1",
-    "user-home": "^3.0.0"
+    "lodash": "^4.17.21",
+    "socket.io-client": "^2.0.0"
   }
 }

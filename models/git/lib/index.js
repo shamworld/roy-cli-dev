@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-07-01 21:44:09
  * @LastEditors: Roy
- * @LastEditTime: 2021-07-08 22:48:00
+ * @LastEditTime: 2021-07-10 23:03:42
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/models/git/lib/index.js
  */
@@ -18,6 +18,7 @@ const inquirer = require('inquirer');
 const semver = require('semver');
 const terminalLink = require('terminal-link');
 const log = require('@roy-cli-dev/log');
+const Cloudbuild = require('@roy-cli-dev/cloudbuild');
 const { readFile, writeFile, spinnerStart } = require('@roy-cli-dev/utils');
 const Github = require('./Github');
 const Gitee = require('./Gitee');
@@ -60,7 +61,7 @@ const GIT_OWNER_TYPE_ONLY = [{
 
 
 class Git {
-    constructor({ name, version, dir }, { refreshServer = false, refreshToken = false, refreshOwner = false }) {
+    constructor({ name, version, dir }, { refreshServer = false, refreshToken = false, refreshOwner = false, buildCmd = '' }) {
         this.name = name;// 项目名称
         this.version = version;// 项目版本
         this.dir = dir;// 源码目录
@@ -76,6 +77,7 @@ class Git {
         this.owner = null; // 远程仓库类型
         this.repo = null; // 远程仓库信息
         this.branch = null; //本地开发分支
+        this.buildCmd = buildCmd;//构建命令
     }
     async prepare() {
         //检查缓存账户目录
@@ -116,6 +118,27 @@ class Git {
         await this.pullRemoteMasterAndBranch();
         //将开发分支推送到远程仓库
         await this.pushRemoteRepo(this.branch);
+    }
+
+    async publish() {
+        await this.preparePublish();
+        //npm run build:prod
+        const cloudBuild = new Cloudbuild(this, {
+            buildCmd: this.buildCmd,
+        });
+        cloudBuild.init();
+        const ret = await cloudBuild.build();
+    }
+
+    async preparePublish() {
+        if (this.buildCmd) {
+            const buildCmdArray = this.buildCmd.split(' ');
+            if (buildCmdArray[0] !== 'npm' && buildCmdArray[0] !== 'cnpm') {
+                throw new Error('Build命令非法，必须使用npm或cnpm！');
+            }
+        } else {
+            this.buildCmd = 'npm run build';
+        }
     }
 
     async pullRemoteMasterAndBranch() {

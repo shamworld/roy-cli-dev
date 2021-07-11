@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-06-27 20:03:28
  * @LastEditors: Roy
- * @LastEditTime: 2021-07-07 22:53:40
+ * @LastEditTime: 2021-07-10 19:54:35
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/commands/publish/lib/index.js
  */
@@ -25,6 +25,7 @@ class PublishCommand extends Command {
             refreshServer: this._cmd.refreshServer,
             refreshToken: this._cmd.refreshToken,
             refreshOwner: this._cmd.refreshOwner,
+            buildCmd: this._cmd.buildCmd,
         }
     }
     async exec() {
@@ -39,6 +40,7 @@ class PublishCommand extends Command {
             //代码自动化提交
             await git.commit();
             //云构建和云发布
+            await git.publish();
             const endTime = new Date().getTime();
             log.info('本次发布耗时:' + Math.floor((endTime - startTime) / 1000) + '秒');
         } catch (e) {
