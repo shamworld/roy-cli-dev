@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-06-27 20:03:28
  * @LastEditors: Roy
- * @LastEditTime: 2021-07-10 19:54:35
+ * @LastEditTime: 2021-07-22 17:56:20
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/commands/publish/lib/index.js
  */
@@ -26,6 +26,10 @@ class PublishCommand extends Command {
             refreshToken: this._cmd.refreshToken,
             refreshOwner: this._cmd.refreshOwner,
             buildCmd: this._cmd.buildCmd,
+            prod: this._cmd.prod,
+            sshUser: this._cmd.sshUser,
+            sshIp: this._cmd.sshIp,
+            sshPath: this._cmd.sshPath,
         }
     }
     async exec() {

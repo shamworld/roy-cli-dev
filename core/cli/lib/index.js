@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-02-23 20:34:11
  * @LastEditors: Roy
- * @LastEditTime: 2021-07-10 19:55:13
+ * @LastEditTime: 2021-07-22 20:38:56
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/core/cli/lib/index.js
  */
@@ -74,6 +74,10 @@ function registerCommand() {
         .option('--refreshToken', '强制更新远程仓库token')
         .option('--refreshOwner', '强制更新远程仓库类型')
         .option('--buildCmd <buildCmd>', '构建命令')
+        .option('--prod', '是否正式发布')
+        .option('--sshUser <sshUser>', '模板服务器用户名')
+        .option('--sshIp <sshIp>', '模板服务器Ip或域名')
+        .option('--sshPath <sshPath>', '模板服务器路径')
         .action(exec);
 
     //开启debug模式
