@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-03-04 15:53:52
  * @LastEditors: Roy
- * @LastEditTime: 2021-05-11 17:15:25
+ * @LastEditTime: 2021-07-23 17:43:14
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/commands/init/lib/index.js
  */
@@ -31,6 +31,8 @@ const TYPE_COMPONENT = 'component';
 const TEMPLATE_TYPE_NORMAL = 'normal';
 const TEMPLATE_TYPE_CUSTOM = 'custom';
 const WHITE_COMMAND = ['npm', 'cnpm'];
+
+const COMPONENT_FILE = '.componentrc';
 
 class InitCommand extends Command {
     init() {
@@ -159,12 +161,31 @@ class InitCommand extends Command {
         const templateIgnore = this.templateInfo.ignore || [];
         const ignore = ['**/node_modules/**', ...templateIgnore];
         await this.ejsRender({ ignore });
+        //如果是组件，则生成组件配置文件
+        await this.createComponentFile(targetPath);
         //依赖安装
         const { installCommand, startCommand } = this.templateInfo
         await this.execCommand(installCommand, '依赖安装过程中失败');
         //启动命令执行
         await this.execCommand(startCommand, '启动执行命令失败');
     }
+
+    async createComponentFile(targetPath) {
+        const templateInfo = this.templateInfo;
+        const projectInfo = this.projectInfo;
+        if (templateInfo.tag.includes(TYPE_COMPONENT)) {
+            const componentData = {
+                ...projectInfo,
+                buildPath: templateInfo.buildPath,
+                examplePath: templateInfo.examplePath,
+                npmVersion: templateInfo.version,
+            }
+            const componentFile = path.resolve(targetPath, COMPONENT_FILE);
+            fs.writeFileSync(componentFile, JSON.stringify(componentData));
+
+        }
+    }
+
     async installCustomTemplate() {
         //查询自定义模板的入口文件
         if (await this.templateNpm.exists()) {
@@ -173,11 +194,11 @@ class InitCommand extends Command {
                 log.notice('开始执行自定义模板');
                 const options = {
                     ...this.options,
-                    cwd:process.cwd(),
+                    cwd: process.cwd(),
                 }
                 const code = `require('${rootFile}')(${JSON.stringify(options)})`;
-                log.verbose('code',code);
-                await execAsync('node',['-e', code], { stdio: 'inherit', cwd: process.cwd()});
+                log.verbose('code', code);
+                await execAsync('node', ['-e', code], { stdio: 'inherit', cwd: process.cwd() });
                 log.success('自定义模板安装成功');
             } else {
                 throw new Error('自定义模板入口文件不存在');
@@ -238,10 +259,10 @@ class InitCommand extends Command {
     async prepare() {
         // 判断项目模板是否存在
         const template = await getProjectTemplate();
-        if (!template || template.length === 0) {
+        if (!template.data || template.data.length === 0) {
             throw new Error('项目模板不存在');
         }
-        this.template = template;
+        this.template = template.data;
         //1.判断当前目录是否为空
         const localPath = process.cwd();
         if (!this.isDirEmpty(localPath)) {
@@ -282,7 +303,7 @@ class InitCommand extends Command {
     async getProjectInfo() {
 
         function isValidName(v) {
-            return /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(v);
+            return /^(@[a-zA-Z0-9_]+\/)?[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(v);
         }
 
         let projectInfo = {};
@@ -291,7 +312,7 @@ class InitCommand extends Command {
             isProjectInfoValid = true;
             projectInfo.projectName = this.projectName;
         }
-        
+
         //1.选择创建项目或组件
         const { type } = await inquirer.prompt({
             type: 'list',

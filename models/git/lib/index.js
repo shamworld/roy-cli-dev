@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-07-01 21:44:09
  * @LastEditors: Roy
- * @LastEditTime: 2021-07-22 23:04:24
+ * @LastEditTime: 2021-08-08 16:04:02
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/models/git/lib/index.js
  */
@@ -25,6 +25,7 @@ const request = require('@roy-cli-dev/request');
 const { readFile, writeFile, spinnerStart } = require('@roy-cli-dev/utils');
 const Github = require('./Github');
 const Gitee = require('./Gitee');
+const ComponentRequest = require('./ComponentRequest');
 
 const DEFAULT_CLI_HOME = '.roy-cli-dev';
 const GIT_ROOT_DIR = '.git';
@@ -79,7 +80,13 @@ class Git {
         sshIp = '',
         sshPath = '',
     }) {
-        this.name = name;// 项目名称
+        if (name.startsWith('@') && name.indexOf('/') > 0) {
+            //@roy-cli-dev/component-test->roy-cli-dev_component_test
+            const nameArr = name.split('/');
+            this.name = nameArr.join('_').replace('@', "");
+        } else {
+            this.name = name;// 项目名称
+        }
         this.version = version;// 项目版本
         this.dir = dir;// 源码目录
         this.git = new SimpleGit(dir);// SimpleGit实例
@@ -117,9 +124,36 @@ class Git {
         await this.checkRepo();
         // 检查并创建.gitignore文件
         this.checkGitIgnore();
+        //组件合法性检查
+        await this.checkComponent();
         await this.init();
     }
 
+    async checkComponent() {
+        let componentFile = this.isComponent();
+        if (componentFile) {
+            log.info('开始检查build结果');
+            if (this.buildCmd) {
+                this.buildCmd = 'npm run build';
+            }
+            require('child_process').execSync(this.buildCmd, {
+                cwd: this.dir
+            })
+            const buildPath = path.resolve(this.dir, componentFile.buildPath);
+            if (!fs.existsSync(buildPath)) {
+                throw new Error(`构建结果:${buildPath}不存在!`);
+            }
+            const pkg = this.getPackageJson();
+            if (!pkg.files || pkg.files.includes(componentFile.buildPath)) {
+                throw new Error(`package.json中files属性未添加构建结果目录:[${componentFile.buildPath}],请在package.json中手动添加!`);
+            }
+            log.success('build结果检查通过!');
+        }
+    }
+    isComponent() {
+        const componentFilePath = path.resolve(this.dir, COMPONENT_FILE);
+        return fs.existsSync(componentFilePath) && fse.readJsonSync(componentFilePath);
+    }
     async init() {
         if (await this.getRemote()) {
             return;
@@ -146,20 +180,28 @@ class Git {
     }
 
     async publish() {
-        await this.preparePublish();
-        //npm run build:prod
-        const cloudBuild = new Cloudbuild(this, {
-            buildCmd: this.buildCmd,
-            type: this.gitPublish,
-            prod: this.prod
-        });
-        await cloudBuild.prepare();
-        await cloudBuild.init();
-        let ret = await cloudBuild.build();
-        if (ret) {
-            await this.uploadTeplate();
+        let ret = false;
+        if (this.isComponent()) {
+            log.info('开始发布组件');
+            ret = await this.saveComponentToDB();
+        } else {
+
+            await this.preparePublish();
+            //npm run build:prod
+            const cloudBuild = new Cloudbuild(this, {
+                buildCmd: this.buildCmd,
+                type: this.gitPublish,
+                prod: this.prod
+            });
+            await cloudBuild.prepare();
+            await cloudBuild.init();
+            ret = await cloudBuild.build();
+            if (ret) {
+                await this.uploadTeplate();
+            }
         }
         if (this.prod && ret) {
+            await this.uploadComponentToNpm();
             // 打tag
             await this.runCreateTagTask();
             // await this.checkTag()
@@ -169,6 +211,49 @@ class Git {
             // await this.deleteLocalBranch();//删除本地开发分支
             // await this.deleteRemoteBranch();//删除远程开发分支
         }
+    }
+    async uploadComponentToNpm() {
+        //完成组件上传npm
+        if (this.isComponent()) {
+            log.info('开始发布NPM');
+            require('child_process').execSync('npm publish', {
+                cwd: this.dir
+            });
+            log.success('NPM发布成功');
+        }
+    }
+    async saveComponentToDB() {
+        //将组件上传数据库
+        log.info('上传组件信息直OSS+写入数据库');
+        const componentFile = this.isComponent();
+        let componentExamplePath = path.resolve(this.dir, componentFile.examplePath);
+        let dirs = fs.readdirSync(componentExamplePath);
+        if (dirs.includes('dist')) {
+            componentExamplePath = path.resolve(componentExamplePath, 'dist');
+            dirs = fs.readdirSync(componentExamplePath);
+            componentFile.examplePath = `${componentFile.examplePath}/dist`;
+        }
+        dirs = dirs.filter(dir => dir.match(/^index(\d)*.html$/));
+        componentFile.exampleList = dirs;
+        componentFile.exampleRealPath = componentExamplePath;
+        const data = await ComponentRequest.createComponent({
+            component: componentFile,
+            git: {
+                type: this.gitServer.type,
+                remote: this.remote,
+                version: this.version,
+                branch: this.branch,
+                login: this.login,
+                owner: this.owner,
+                repo: this.repo,
+            }
+        });
+        if (!data) {
+            throw new Error('上传组件失败');
+        }
+        //将组件多预览页面上传至OSS 
+
+        return true;
     }
     // 自动生成远程仓库分支
     runCreateTagTask() {
