@@ -5,7 +5,7 @@
  * @Github: @163.com
  * @Date: 2021-07-01 21:44:09
  * @LastEditors: Roy
- * @LastEditTime: 2021-08-08 16:04:02
+ * @LastEditTime: 2021-09-07 22:05:53
  * @Deprecated: 否
  * @FilePath: /roy-cli-dev/models/git/lib/index.js
  */
@@ -42,6 +42,7 @@ const REPO_OWNER_ORG = 'org';
 const VERSION_RELEASE = 'release';
 const VERSION_DEVELOP = 'dev';
 const TEMPLATE_TEMP_DIR = 'oss';
+const COMPONENT_FILE = '.componentrc';
 
 const GIT_SERVER_TYPE = [{
     name: 'Github',
@@ -204,12 +205,12 @@ class Git {
             await this.uploadComponentToNpm();
             // 打tag
             await this.runCreateTagTask();
-            // await this.checkTag()
-            // await this.checkoutBranch('master');//切换分支到master
-            // await this.mergeBranchToMaster();//将开发分支合并到master
-            // await this.pushRemoteRepo('master');//讲代码推送到远程master
-            // await this.deleteLocalBranch();//删除本地开发分支
-            // await this.deleteRemoteBranch();//删除远程开发分支
+            await this.checkTag()
+            await this.checkoutBranch('master');//切换分支到master
+            await this.mergeBranchToMaster();//将开发分支合并到master
+            await this.pushRemoteRepo('master');//讲代码推送到远程master
+            await this.deleteLocalBranch();//删除本地开发分支
+            await this.deleteRemoteBranch();//删除远程开发分支
         }
     }
     async uploadComponentToNpm() {

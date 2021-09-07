@@ -21,7 +21,7 @@
     "url": "git+https://github.com/shamworld/roy-cli-dev.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "mocha __tests__/git.test.js"
   },
   "bugs": {
     "url": "https://github.com/shamworld/roy-cli-dev/issues"
@@ -40,5 +40,9 @@
     "simple-git": "^2.40.0",
     "terminal-link": "^2.1.1",
     "user-home": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^9.1.1",
+    "should": "^13.2.3"
   }
 }
